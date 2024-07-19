@@ -1,7 +1,7 @@
 # Import the users table
 from models.users_models import UsersDB
 # Import the users pydantic schema
-from schemas.primary_schemas import UserCreate, UserSearch
+from schemas.primary_schemas import UserCreate, UserSearch, UserChangePassword
 # Import the database Session
 from config.database_connection import db_session
 # Import the Session from sqlalchemy for parameter validations
@@ -110,3 +110,28 @@ def delete_existent_user(userId: str, db_session: Session) -> dict:
         return {"error": str(e)}
 
 
+def change_existent_password(passwords: UserChangePassword, id: str, db_session: Session) -> dict:
+    try:
+        check = passwords.check()
+        if check:
+            userToCHange = db_session.query(UsersDB).filter(UsersDB.id == id).first()
+            if userToCHange:
+                salt = bcrypt.gensalt()
+                hashedNew = bcrypt.hashpw(passwords.planePassword.encode("utf-8"),salt)
+                userToCHange.password = hashedNew
+                db_session.commit()
+                return {"succes": "Password Changed"}
+            else:
+                return {"not_exystent": "User not in the database"}
+        else: 
+            return {"error": "Not equal passwords"}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def list_existent_users(db_session: Session) -> List[UsersDB] or dict:
+    try:
+        respond = db_session.query(UsersDB).all()
+        return respond
+    except Exception as e:
+        return {"error": str(e)}
