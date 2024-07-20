@@ -97,14 +97,20 @@ def delete_existent_user(userId: str, db_session: Session) -> dict:
     try:
         # Finds the desired user to delete with the get() method that takes the id
         userToDelete = db_session.query(UsersDB).get(userId)
-        # Deletes the instance in the database with the delete method
-        db_session.delete(userToDelete)
-        # Commit the changes
-        db_session.commit()
-        # And refresh the data
-        db_session.refresh(userToDelete)
-        # Return a dict confirmation message
-        return {"succes": "User Deleted"}
+        # If the user exist in the database
+        if userToDelete:
+            # Deletes the instance in the database with the delete method
+            db_session.delete(userToDelete)
+            # Commit the changes
+            db_session.commit()
+            # And refresh the data
+            db_session.refresh(userToDelete)
+            # Return a dict confirmation message
+            return {"succes": "User Deleted"}
+        # If not exist in the database
+        else:
+            # Returns the not exist error
+            return {"error": "User dont exist in the database"}
     except Exception as e:
         # If there is any exceptions returns a dict with the exception description
         return {"error": str(e)}
