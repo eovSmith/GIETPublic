@@ -28,6 +28,7 @@ def create_new_user(newUser: UserCreate, db_session: Session) -> dict:
         # First search if the user existe in the database 
         dummyUser = UserSearch(id= newUser.id)
         check = search_user_in_db(search=dummyUser, db_session= db_session)
+        print(check)
         if check:
             return {"error": " User already exist in database"}
         # Gets a dict of the UserCreate schema using the model_dump() method
@@ -64,11 +65,13 @@ def search_user_in_db(search: UserSearch, db_session: Session) -> UsersDB or Lis
     Returns:
         UsersDB or List[UsersDB]: _Returns a UserDB object or a list of UserDB objects if there are more than one match_
     """
+    print(search.model_dump(exclude=None).items())
     fields = []
     try:
         # Iterate in the dict obtained from the schema with the method model_dump
-        for key, value in search.model_dump(exclude=None):
+        for key, value in search.model_dump(exclude=None).items():
             if value and value.strip():
+                print(key)
                 # With the geattr() method obtains the field in the db model and add the condition with ilike() method
                 fields.append(getattr(UsersDB, key).ilike(f"%{value}%"))
         if fields:

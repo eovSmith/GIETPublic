@@ -72,6 +72,47 @@ async def user_render_index_page(request: Request, session: Session = Depends(db
         return {"system_exception": str(e)}
         
 
+@user_Router.get("/searchUser",status_code=200, tags=["User Router"], response_class=HTMLResponse)
+async def user_render_search_page(request: Request) -> HTMLResponse:
+    """_Search a especific user in the database_
+
+    Args:
+        request (Request): _The HTTP request_
+
+    Raises:
+        NotADirectoryError: _description_
+
+    Returns:
+        HTMLResponse: __
+    """
+    
+    raise NotImplementedError("Method not implemented yet")
+
+
+@user_Router.post("/searchUser",status_code=200, tags=["User Router"], response_class=JSONResponse)
+async def user_render_search_page_post(request: Request, search: UserSearch, session: Session = Depends(db_session)) -> HTMLResponse:
+    """_Get the post to search a especific user in the database_
+
+    Args:
+        request (Request): _The HTTP request_
+        search ( UserSearch): _The user search squema_
+        session (Session, optional): _The database session_. Defaults to Depends(db_session).
+
+    Raises:
+        NotADirectoryError: _description_
+
+    Returns:
+        HTMLResponse: __
+    """
+    try:
+        respond = search_user_in_db(search=search, db_session=session)
+        if not isinstance(respond, dict):
+            return JSONResponse(content={"data": respond}, status_code=200)
+        else:
+            return JSONResponse(content=respond, status_code=401)
+    except Exception as e:
+        return JSONResponse(content={"System Exception": str(e)}, status_code=501)
+
 
 @user_Router.get("/new", status_code=200, tags=["User Router"], response_class=JSONResponse)
 async def user_render_newUserPage(request: Request) -> HTMLResponse:
@@ -199,7 +240,6 @@ async def user_delete_existent_user(request: Request, cid: str, session: Session
         return JSONResponse(content={"system_exception": str(e)}, status_code=501)
     
 
-
 @user_Router.delete("/deleteAll", status_code=200, tags=["User Router"], response_class=JSONResponse)
 async def user_delete_all_exixtent_users(request: Request, session: Session = Depends(db_session)) -> JSONResponse:
     """_Delete all the users in the db_
@@ -227,4 +267,6 @@ async def user_delete_all_exixtent_users(request: Request, session: Session = De
     except Exception as e:
         # Returns the system exception response with the exception description
         return JSONResponse(content={"system_exception": str(e)}, status_code=501)
+    
+    
 "-------------------------------------------------------------------------------USER_ROUTES----------------------------------------------------------------------------------------------------------------------------------------------"

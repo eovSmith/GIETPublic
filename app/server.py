@@ -1,7 +1,12 @@
-import uvicorn # Import the uvicorn server and the created Fastapi instance
+ # Import the uvicorn server and the created Fastapi instance
+import uvicorn
+# Import the fastapi app instance
 from main import app
+# Import the load_dotenv method from dotenv for load the enviorement variables
 from dotenv import load_dotenv
+# Import the logging module for make console messages
 import logging
+# Import os to use the path an env methods
 import os
 
 
