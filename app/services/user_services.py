@@ -13,7 +13,7 @@ from typing import List , Union
 # Import bcrypt to encrypt the passwords
 import bcrypt
 
-
+"------------------------------------------------------------------------USER SERVICES--------------------------------------------------------------------------------------------------------------------------------------------------"
 def create_new_user(newUser: UserCreate, db_session: Session) -> dict:
     """_The create new user method_
 
@@ -48,8 +48,9 @@ def create_new_user(newUser: UserCreate, db_session: Session) -> dict:
         db_session.refresh(new)
         # Finally it returns a dict message with the name of the new user
         return {"success": f"{newUser.firstName} {newUser.lastName}"}
+    # If there is any exceptions
     except Exception as e:
-        # If there is any exceptions returns a dict with the exception description
+        # Returns a dict with the exception description
         return {"error": str(e)}
 
 
@@ -79,8 +80,9 @@ def search_user_in_db(search: UserSearch, db_session: Session) -> UsersDB or Lis
             else:
                 # If there is no match returns all the data
                 return db_session.query(UsersDB).all()
+    # If there is any exceptions 
     except Exception as e:
-        # If there is any exceptions returns a dict with the exception description
+        # Returns a dict with the exception description
         return {"error": str(e)}
     
 
@@ -111,33 +113,80 @@ def delete_existent_user(userId: str, db_session: Session) -> dict:
         else:
             # Returns the not exist error
             return {"error": "User dont exist in the database"}
+     # If there is any exceptions
     except Exception as e:
-        # If there is any exceptions returns a dict with the exception description
+        # Returns a dict with the exception description
         return {"error": str(e)}
 
 
 def change_existent_password(passwords: UserChangePassword, id: str, db_session: Session) -> dict:
+    """_Updates the existen password of an especific user_
+
+    Args:
+        passwords (UserChangePassword): _The user schema with the new password_
+        id (str): _the user cid_
+        db_session (Session): _Te database session_
+
+    Returns:
+        dict: _success messages or errors messages_
+    """
     try:
+        # User the shema method check to check if the passwords in the schema are equals
         check = passwords.check()
+        # If are equals
         if check:
+            # Gets the user with the id
             userToCHange = db_session.query(UsersDB).filter(UsersDB.id == id).first()
+            # If the user exist
             if userToCHange:
+                # Generates a salt for the encrypting method
                 salt = bcrypt.gensalt()
+                # Encripts the new password
                 hashedNew = bcrypt.hashpw(passwords.planePassword.encode("utf-8"),salt)
+                # Changes the existen password
                 userToCHange.password = hashedNew
+                # Commits the changes
                 db_session.commit()
+                # Returns the success respond
                 return {"succes": "Password Changed"}
+            # If the user dont exist in the database
             else:
+                # Returns a non existent message
                 return {"not_exystent": "User not in the database"}
+        # If the passwords are not equals
         else: 
+            # Returns a error response
             return {"error": "Not equal passwords"}
+    # If there is any exception during the process
     except Exception as e:
+       # Returns a dict with the exception description
         return {"error": str(e)}
 
 
 def list_existent_users(db_session: Session) -> List[UsersDB] or dict:
+    """_List the existent users in the database_
+
+    Args:
+        db_session (Session): _The database session_
+
+    Returns:
+        List[UsersDB] or dict: _The list of data_
+    """
     try:
+        # Gets the list of elements in the database
         respond = db_session.query(UsersDB).all()
-        return respond
+        # If there is data
+        if respond:
+            # Returns the list of elements
+            return respond
+        # If not
+        else:
+            # Returns a message with the information
+            return {"message": "The data is empty"}
+    # If there is any exception during the process
     except Exception as e:
+        # Returns a dict with the exception description
         return {"error": str(e)}
+
+
+"------------------------------------------------------------------------USER SERVICES--------------------------------------------------------------------------------------------------------------------------------------------------"

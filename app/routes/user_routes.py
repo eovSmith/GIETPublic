@@ -212,18 +212,20 @@ async def user_render_change_password_post(request: Request,
 
 @user_Router.delete("/deleteExistentUser/{cid: str}",
                   status_code=200,
-                  tags=["User Routes"])
+                  tags=["User Router"])
 async def user_delete_existent_user(request: Request,
                                     cid: str,
                                     session: Session = Depends(db_session)
-                                    ):
+                                    ) -> JSONResponse:
     try:
         respond = delete_existent_user(userId=cid,
                                        db_session=session)
         if respond["success"]:
-            return JSONResponse(content=respond, status_code=200)
+            return JSONResponse(content=respond,
+                                status_code=200)
         else:
-            return JSONResponse(content=respond, status_code=401)
+            return JSONResponse(content=respond,
+                                status_code=401)
     except Exception as e:
         return JSONResponse(content={"system_exception": str(e)})
 "-------------------------------------------------------------------------------USER_ROUTES----------------------------------------------------------------------------------------------------------------------------------------------"
