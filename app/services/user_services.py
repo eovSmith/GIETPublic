@@ -189,4 +189,25 @@ def list_existent_users(db_session: Session) -> List[UsersDB] or dict:
         return {"error": str(e)}
 
 
+def delete_all_existent_users(db_session: Session) -> dict:
+    """_Delete all the existent users in the database_
+
+    Args:
+        db_session (Session): _The database session_
+
+    Returns:
+        dict: _The Response message_
+    """
+    try:
+        # Execute the delete query
+        db_session.query(UsersDB).delete()
+        # Commit the changes in the database
+        db_session.commit()
+        # Returns a success message
+        return {"success": "Data cleaned"}
+    # If there is any exception during the process
+    except Exception as e:
+        # Returns a dict with the exception description
+        return {"error": str(e)}
+        
 "------------------------------------------------------------------------USER SERVICES--------------------------------------------------------------------------------------------------------------------------------------------------"
