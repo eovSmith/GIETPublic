@@ -30,4 +30,4 @@ class UsersDB(Base):
     
     def __repr__(self) -> str:
         # Visual friendly representation for the database data
-        return f"< User: cid={self.id} name={self.firstName} {self.lasName} email={self.email} >"
+        return f"< User: cid={self.id} name={self.firstName} {self.lastName} email={self.email} >"

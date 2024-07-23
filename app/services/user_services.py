@@ -12,6 +12,8 @@ from sqlalchemy import (and_ , or_)
 from typing import List , Union
 # Import bcrypt to encrypt the passwords
 import bcrypt
+from fastapi.encoders import jsonable_encoder
+
 
 "------------------------------------------------------------------------USER SERVICES--------------------------------------------------------------------------------------------------------------------------------------------------"
 def create_new_user(newUser: UserCreate, db_session: Session) -> dict:
@@ -26,10 +28,11 @@ def create_new_user(newUser: UserCreate, db_session: Session) -> dict:
     """
     try:
         # First search if the user existe in the database 
-        dummyUser = UserSearch(id= newUser.id)
-        check = search_user_in_db(search=dummyUser, db_session= db_session)
-        print(check)
-        if check:
+        dummyUser = UserSearch(id=newUser.id)
+        check = search_user_in_db(search=dummyUser, db_session=db_session)
+        # If the search gets any resutls
+        if check.get("results"):
+            # Returns the error that the user already exist in the database
             return {"error": " User already exist in database"}
         # Gets a dict of the UserCreate schema using the model_dump() method
         newData = newUser.model_dump()
@@ -39,7 +42,7 @@ def create_new_user(newUser: UserCreate, db_session: Session) -> dict:
         hashedPassword = bcrypt.hashpw(newData.get("password").encode("utf-8"),salt)
         # Updates the existent dict
         newData.update({"password": hashedPassword})
-         # Create a new instance of the UserDB model using the deconstruct of the created dict
+        # Create a new instance of the UserDB model using the deconstruct of the created dict
         new = UsersDB(**newData)
         # Add the new instance to the desired table with the add() method
         db_session.add(new)
@@ -55,7 +58,7 @@ def create_new_user(newUser: UserCreate, db_session: Session) -> dict:
         return {"error": str(e)}
 
 
-def search_user_in_db(search: UserSearch, db_session: Session) -> UsersDB or List[UserCreate] :
+def search_user_in_db(search: UserSearch, db_session: Session) -> dict:
     """_Search an user into the database making a filter with parameters and returns it_
 
     Args:
@@ -65,25 +68,25 @@ def search_user_in_db(search: UserSearch, db_session: Session) -> UsersDB or Lis
     Returns:
         UsersDB or List[UsersDB]: _Returns a UserDB object or a list of UserDB objects if there are more than one match_
     """
-    print(search.model_dump(exclude=None).items())
-    fields = []
     try:
+        fields = []
         # Iterate in the dict obtained from the schema with the method model_dump
-        for key, value in search.model_dump(exclude=None).items():
-            if value and value.strip():
-                print(key)
+        for key, value in search.model_dump(exclude_none=True).items():
+            if value:
                 # With the geattr() method obtains the field in the db model and add the condition with ilike() method
                 fields.append(getattr(UsersDB, key).ilike(f"%{value}%"))
         if fields:
             # Search the match in the database with the filter method and the fields list
             results = db_session.query(UsersDB).filter(and_(*fields)).all()
+            # If there is any match
             if results:
-                # If there is any match returns it
-                return results
+                # Returns it
+                return  {"results": results}
+            # If not
             else:
-                # If there is no match returns all the data
-                return db_session.query(UsersDB).all()
-    # If there is any exceptions 
+                # Returns a not found response
+                return {"not_found": "Dont match any"}
+    # If there is any exceptions
     except Exception as e:
         # Returns a dict with the exception description
         return {"error": str(e)}
@@ -151,7 +154,7 @@ def change_existent_password(passwords: UserChangePassword, id: str, db_session:
                 # Commits the changes
                 db_session.commit()
                 # Returns the success respond
-                return {"succes": "Password Changed"}
+                return {"success": "Password Changed"}
             # If the user dont exist in the database
             else:
                 # Returns a non existent message
@@ -166,7 +169,7 @@ def change_existent_password(passwords: UserChangePassword, id: str, db_session:
         return {"error": str(e)}
 
 
-def list_existent_users(db_session: Session) -> List[UsersDB] or dict:
+def list_existent_users(db_session: Session) -> dict:
     """_List the existent users in the database_
 
     Args:
@@ -181,7 +184,7 @@ def list_existent_users(db_session: Session) -> List[UsersDB] or dict:
         # If there is data
         if respond:
             # Returns the list of elements
-            return respond
+            return {"data": respond}
         # If not
         else:
             # Returns a message with the information

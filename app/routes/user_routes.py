@@ -12,10 +12,12 @@ from models.users_models import UsersDB
 from fastapi.responses import HTMLResponse ,JSONResponse
 # Import the services
 from services.user_services import (create_new_user, delete_existent_user, search_user_in_db, change_existent_password, list_existent_users, delete_all_existent_users)
-# Import the database methods
-from fastapi import Depends
+# Import the database methods and the session
+from fastapi.param_functions import Depends
 from config.database_connection import db_session
 from sqlalchemy.orm import Session
+# Import the jsonable_encoder method to encode in a jsonable readeble text the database data
+from fastapi.encoders import jsonable_encoder
 
 
 # Create the name of the instance
@@ -59,9 +61,9 @@ async def user_render_index_page(request: Request, session: Session = Depends(db
         # Calls and Gets the data from the list_existent_users() method that gets all the users in the database
         data = list_existent_users(db_session=session)
         # If there is data
-        if data:
+        if data.get("data"):
             # Returns the template with the data
-            return data
+            return jsonable_encoder(data["data"])
         # If not
         else:
             # Returns the template without the data
@@ -89,8 +91,8 @@ async def user_render_search_page(request: Request) -> HTMLResponse:
     raise NotImplementedError("Method not implemented yet")
 
 
-@user_Router.post("/searchUser",status_code=200, tags=["User Router"], response_class=JSONResponse)
-async def user_render_search_page_post(request: Request, search: UserSearch, session: Session = Depends(db_session)) -> HTMLResponse:
+@user_Router.post("/searchUser",status_code=200, tags=["User Router"])
+async def user_render_search_page_post(request: Request, search: UserSearch, session: Session = Depends(db_session)):
     """_Get the post to search a especific user in the database_
 
     Args:
@@ -106,8 +108,8 @@ async def user_render_search_page_post(request: Request, search: UserSearch, ses
     """
     try:
         respond = search_user_in_db(search=search, db_session=session)
-        if not isinstance(respond, dict):
-            return JSONResponse(content={"data": respond}, status_code=200)
+        if respond.get("results"):
+            return JSONResponse(content={"data": jsonable_encoder(respond["results"])}, status_code=200)
         else:
             return JSONResponse(content=respond, status_code=401)
     except Exception as e:
@@ -145,7 +147,7 @@ async def user_render_newUserPage_post(request: Request, newUser: UserCreate, se
         # Call and Gets the response of the create_new_user() method that creates the new user
         respond = create_new_user(newUser=newUser, db_session=session)
         # If there is a error in the operation
-        if respond["error"]:
+        if respond.get("error"):
             # Returns the error response
             return JSONResponse(content=respond, status_code=401)
         # If not
@@ -155,7 +157,7 @@ async def user_render_newUserPage_post(request: Request, newUser: UserCreate, se
     # If there was any exception
     except Exception as e:
         # Returns the system exception response with the exception description
-        raise JSONResponse(content={"System Exception": str(e)}, status_code=401)
+        return JSONResponse(content={"system_except": str(e)}, status_code=501)
     
 
 @user_Router.get("/changePassword", status_code=200, tags=["User Router"], response_class=JSONResponse)
@@ -196,7 +198,7 @@ async def user_render_change_password_post(request: Request, data: UserChangePas
         # Calls and Gets the response of the change_existent_password() method that change the desired user password
         respond = change_existent_password(passwords=data, id=cid, db_session=session)
         # If the operation was a success
-        if respond["success"]:
+        if respond.get("success"):
             # Returns the successfull response
             return JSONResponse(content=respond, status_code=200)
         else:

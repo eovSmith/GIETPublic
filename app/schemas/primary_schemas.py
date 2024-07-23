@@ -125,7 +125,7 @@ class UserSearch(BaseModel):
     
     """
     id: Optional[str] = None
-    firstName: Optional[str]= None
+    firstName: Optional[str] = None
     lastName: Optional[str] = None 
     email: Optional[str] = None
 
