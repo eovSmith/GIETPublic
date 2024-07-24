@@ -148,6 +148,8 @@ class UserLogin(BaseModel):
 class UserChangePassword(BaseModel):
     """_The user schema for changing the current password in the system_
     
+    planePassword: The known user only password
+    planePasswordRepeat: The known user only password confirmation
     """
     
     planePassword: str

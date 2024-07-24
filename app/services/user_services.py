@@ -10,8 +10,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import (and_ , or_)
 # Import the type return data
 from typing import List , Union
-# Import bcrypt to encrypt the passwords
+# Import bcrypt to encrypt the passwordsS
 import bcrypt
+# Import jsonable_encoder to convert the data to json
 from fastapi.encoders import jsonable_encoder
 
 

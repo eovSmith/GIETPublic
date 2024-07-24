@@ -18,7 +18,7 @@ class DriverDB(Base):
     licenceNumber: Mapped[str] = mapped_column(String(8), nullable=False)
     jobPosition:  Mapped[str] = mapped_column(String(255), nullable=False)
     vecycle_id : Mapped[str] = mapped_column(String(8), ForeignKey("vecycles_table.licencePlate") , nullable=True)
-    vecycle = None
+    vecycle = relationship("VecycleDB", back_populates="driver", uselist= False)
     
     
     def __repr__(self) -> str:
