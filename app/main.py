@@ -1,6 +1,6 @@
 # Import fastapi and the http request
 # from fastapi_offline import FastAPIOffline
-from fastapi import (FastAPI,Request)
+from fastapi import (FastAPI, Request)
 # Import the JsonResponse
 from fastapi.responses import JSONResponse
 # Import the Routers
@@ -8,18 +8,23 @@ from routes.user_routes import user_Router
 from routes.vecycle_routes import vecycle_Router
 from routes.driver_routes import driver_Router
 # Import the db init method
-from config.database_connection import init_db 
+from config.database_connection import init_db
+# Import the CORSMiddleware 
 from fastapi.middleware.cors import CORSMiddleware
-
+# Import StaticFiles
+from fastapi.staticfiles import StaticFiles
 
 # Declares the instance
 app = FastAPI()
 # Start the database
 app.add_event_handler("startup", init_db)
+# Mount the static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 # Include the routers to the main app
 app.include_router(user_Router)
 app.include_router(vecycle_Router)
 app.include_router(driver_Router)
+# Add the offline middleware
 app.add_middleware(
      CORSMiddleware,
     allow_origins=["*"],
@@ -27,6 +32,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 

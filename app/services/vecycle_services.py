@@ -161,3 +161,32 @@ def vecycle_assign_driver(vecyclePlate: str, driverCid: str, db_session: Session
     except Exception as e:
         # Returns a dict with the exception description
         return {"error": str(e)}
+
+
+def delete_all_existent_vecycles(db_session: Session) -> dict:
+    
+    
+    """_Delete all the existent vecycles in the database _
+
+     Args:
+        db_session (Session): _The database session_
+
+    Returns:
+        dict: _The Response message_
+    """
+    
+    
+    try:
+        # Delete all the vecycles in the database
+        db_session.query(VecyclesDB).delete()
+        # Commit the changes
+        db_session.commit()
+        # Returns a dict with the success message
+        return {"success": "All vecycles deleted"}
+    # If an exception is raised
+    except Exception as e:
+        # Returns a dict with the exception description
+        return {"error": str(e)}
+    
+    
+"-----------------------------------------------------------------------Vecycles Services-----------------------------------------------------------------------"

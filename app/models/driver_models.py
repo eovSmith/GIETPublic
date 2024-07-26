@@ -4,6 +4,7 @@ from config.database_connection import Base
 from sqlalchemy.types import (String, Boolean, Integer, VARCHAR, Date)
 # Imports the Mapped class and the mapped_column method to define the atribute propertys, also the relationship() method to specify the relationships
 from sqlalchemy.orm import (Mapped, mapped_column, relationship)
+# Imports the ForeignKey class for the relationships id 
 from sqlalchemy import ForeignKey
 
 
