@@ -114,7 +114,7 @@ def delete_existent_vecycle(vecyclePlate: str, db_session: Session) -> dict:
             # Commit the changes
             db_session.commit()
             # Returns a dict with the vecycle plate
-            return {"vecycle": vecyclePlate}
+            return {"success": "vecycle deleted"}
         # If not
         else:
             # Returns a not found response
