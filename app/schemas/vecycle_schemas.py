@@ -1,11 +1,9 @@
 # Import the Base model class for the creation of the schemes and the Field class for validations
-from pydantic import (BaseModel, Field)
+from pydantic import (BaseModel, Field, field_validator)
 # Import the Optional class for the definition of opcional fields
 from typing import Optional
 # Import datemtime.date for date parameters
 from datetime import date
-# Import field_validators for the validation of the fields  
-from pydantic.validators import field_validator
 # Import re for regular expressions
 import re
 
@@ -41,10 +39,6 @@ class VecycleCreate(BaseModel):
         if not value:
             # if empty raise an Value error
             raise ValueError("Date field cannot be empty")
-        # Check if the date is in the correct format
-        if not re.match(r"\d{2}-\d{2}-\d{4}", value):
-            # If is not in the correct format raise an Value error
-            raise ValueError("Invalid date format. Please use DD-MM-YYYY")
         # If everything is ok
         else:
             # return value
@@ -85,7 +79,7 @@ class VecycleCreate(BaseModel):
             return value
         
     
-    @field_validator("typeOfVehicle")
+    @field_validator("vecycleType")
     def validate_type_of_vehicle(cls, value: str) -> str:
         """_Validator for the vecicle type _"""
         # Check if the type of vehicle is empty

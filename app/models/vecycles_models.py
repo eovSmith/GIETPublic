@@ -31,8 +31,8 @@ class VecyclesDB(Base):
     countryOfOrigin: Mapped[str] = mapped_column(String(255), nullable=False)
     ficav: Mapped[Date] = mapped_column(Date(), nullable=False)
     lot: Mapped[Date] = mapped_column(Date(), nullable=False)
-    driver_id: Mapped[String] = mapped_column(String(11), ForeignKey("drivers_table.cid"), nullable=True,)
-    driver = relationship("DriverDB", back_populates="vecycle", uselist=False)
+    driver_id: Mapped[String] = mapped_column(String(11), ForeignKey("drivers_table.cid"), nullable=True, unique=True)
+    driver = relationship("DriverDB", back_populates="vecycle", uselist=False, remote_side="DriverDB.cid")
     
     def __repr__ (self) -> str:
         # Visual friendly representation for the database data

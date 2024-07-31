@@ -1,7 +1,7 @@
 # Import the vecycle table
 from models.vecycles_models import VecyclesDB
 # Import the driver table
-from models.driver_models import DriversDB
+from models.driver_models import DriverDB
 # Import the vecycle pydantic schema
 from schemas.vecycle_schemas import VecycleCreate, VecycleSearch
 # Import the database Session
@@ -144,7 +144,7 @@ def vecycle_assign_driver(vecyclePlate: str, driverCid: str, db_session: Session
         # Search the vecycle in the database with the filter method and the plate
         vecycle = db_session.query(VecyclesDB).get(vecyclePlate).first()
         # Search the driver in the database with the filter method and the cid
-        driver = db_session.query(DriversDB).get(driverCid).first()
+        driver = db_session.query(DriverDB).get(driverCid).first()
         # If the vecycle and the driver exists
         if vecycle and driver:
             # Assign the driver to the vecycle

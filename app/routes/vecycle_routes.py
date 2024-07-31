@@ -32,7 +32,7 @@ vecycle_Router = APIRouter(prefix="/Vecycles")
 
 
 @vecycle_Router.get("/Page", tags=["Vecycle Router"], status_code=200, response_class= HTMLResponse)
-async def vecylce_render_main_page(request: Request):
+async def vecylce_render_main_page(request: Request) -> HTMLResponse:
     """_Render the vecycle main page_
 
     Args:
@@ -46,7 +46,7 @@ async def vecylce_render_main_page(request: Request):
 
 
 @vecycle_Router.get("/new", tags=["Vecycle Router"], status_code=200, response_class= HTMLResponse)
-async def vecylce_render_new_page(request: Request):
+async def vecylce_render_new_page(request: Request) -> HTMLResponse:
     """_Render the vecycle new page_
 
     Args:
@@ -60,7 +60,7 @@ async def vecylce_render_new_page(request: Request):
 
 
 @vecycle_Router.post("/new", tags=["Vecycle Router"], status_code=200, response_class= HTMLResponse)
-async def vecylce_render_new_page_post(request: Request, new: VecycleCreate, db: Session = Depends(db_session)):
+async def vecylce_render_new_page_post(request: Request, new: VecycleCreate, db: Session = Depends(db_session)) -> JSONResponse:
     
     
     """_Manage the new vecycle creation post_
@@ -79,7 +79,7 @@ async def vecylce_render_new_page_post(request: Request, new: VecycleCreate, db:
     
     try:
         # Call and Gets the response of the create_new_vecycle() method that creates the new vecycle
-        respond = create_new_vecycle(vecycle=new, db=db)
+        respond = create_new_vecycle(vecycle=new, db_session=db)
         # If there is a error in the operation
         if respond.get("error"):
             # # Returns the error response
@@ -94,8 +94,8 @@ async def vecylce_render_new_page_post(request: Request, new: VecycleCreate, db:
         return JSONResponse(content={"system_exception": str(e)}, status_code=500)
         
 
-@vecycle_Router.get("/search", tags=["Vecycle Router"], status_code=200, response_model=HTMLResponse)
-async def vecycle_render_search_page(request: Request):
+@vecycle_Router.get("/search", tags=["Vecycle Router"], status_code=200, response_class=HTMLResponse)
+async def vecycle_render_search_page(request: Request) -> HTMLResponse:
     """_Search for a vecycle by its name_
 
 
@@ -105,13 +105,11 @@ async def vecycle_render_search_page(request: Request):
 
     Returns:
     """
-    
-    
     raise NotImplementedError("Method not implemented yet")
 
 
-@vecycle_Router.post("/search", tags=["Vecycle Router"], status_code=200, response_model=JSONResponse)
-async def vecycle_render_search_page_post(request: Request ,search: VecycleSearch, db: Session = Depends(db_session)):
+@vecycle_Router.post("/search", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse)
+async def vecycle_render_search_page_post(request: Request ,search: VecycleSearch, db: Session = Depends(db_session)) -> JSONResponse:
     """_Search for a vecycle by its name_
 
 
@@ -145,7 +143,7 @@ async def vecycle_render_search_page_post(request: Request ,search: VecycleSearc
 
 
 @vecycle_Router.delete("/vecycle/delete/{vecycle_id}", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse)
-async def delete_vecycle(request: Request ,vecycle_id: str, db: Session = Depends(db_session)):
+async def delete_vecycle(request: Request ,vecycle_id: str, db: Session = Depends(db_session)) -> JSONResponse:
     """
 
 
@@ -171,7 +169,7 @@ async def delete_vecycle(request: Request ,vecycle_id: str, db: Session = Depend
 
 
 @vecycle_Router.delete("/vecycle/delete/all", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse)
-async def delete_all_vecycles(request: Request, db: Session = Depends(db_session)):
+async def delete_all_vecycles(request: Request, db: Session = Depends(db_session)) -> JSONResponse:
     """
 
 
@@ -194,7 +192,7 @@ async def delete_all_vecycles(request: Request, db: Session = Depends(db_session
 
 
 @vecycle_Router.get("/assign_driver/{vecycle_id}", tags=["Vecycle Router"], status_code=200, response_class=HTMLResponse)
-async def vecycle_render_assign_driver_get(request: Request):
+async def vecycle_render_assign_driver_get(request: Request) -> HTMLResponse:
     """"""
     
     raise NotImplementedError("Method not implemented yet")
@@ -202,7 +200,7 @@ async def vecycle_render_assign_driver_get(request: Request):
 
 
 @vecycle_Router.post("/assign_driver/{vecycle_id}", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse )
-async def vecycle_render_assign_driver_post(request: Request, vecycle_id: str, driver: str , db: Session = Depends(db_session)):
+async def vecycle_render_assign_driver_post(request: Request, vecycle_id: str, driver: str , db: Session = Depends(db_session)) -> JSONResponse:
     """
 
 
