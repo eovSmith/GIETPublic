@@ -155,7 +155,6 @@ class UserChangePassword(BaseModel):
     planePassword: str
     planePasswordRepeat: str
     
-    @classmethod
     def check(self) -> bool:
         """_Checks if the passwords are equals_"""
         # returns the value of the bool condition

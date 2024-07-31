@@ -111,9 +111,9 @@ async def user_render_search_page_post(request: Request, search: UserSearch, ses
         if respond.get("results"):
             return JSONResponse(content={"data": jsonable_encoder(respond["results"])}, status_code=200)
         else:
-            return JSONResponse(content=respond, status_code=401)
+            return JSONResponse(content=respond, status_code=500)
     except Exception as e:
-        return JSONResponse(content={"System Exception": str(e)}, status_code=501)
+        return JSONResponse(content={"System Exception": str(e)}, status_code=500)
 
 
 @user_Router.get("/new", status_code=200, tags=["User Router"], response_class=JSONResponse)
@@ -149,7 +149,7 @@ async def user_render_newUserPage_post(request: Request, newUser: UserCreate, se
         # If there is a error in the operation
         if respond.get("error"):
             # Returns the error response
-            return JSONResponse(content=respond, status_code=401)
+            return JSONResponse(content=respond, status_code=500)
         # If not
         else:
             # Returns the successfull response
@@ -157,7 +157,7 @@ async def user_render_newUserPage_post(request: Request, newUser: UserCreate, se
     # If there was any exception
     except Exception as e:
         # Returns the system exception response with the exception description
-        return JSONResponse(content={"system_except": str(e)}, status_code=501)
+        return JSONResponse(content={"system_except": str(e)}, status_code=500)
     
 
 @user_Router.get("/changePassword", status_code=200, tags=["User Router"], response_class=JSONResponse)
@@ -203,11 +203,11 @@ async def user_render_change_password_post(request: Request, data: UserChangePas
             return JSONResponse(content=respond, status_code=200)
         else:
             # If not returns the exception or error
-            return JSONResponse(content=respond, status_code=401)
+            return JSONResponse(content=respond, status_code=500)
     # If there is any exception during the operations
     except Exception as e:
         # Returns the system exception response with the exception description
-        return JSONResponse(content={"system_exception": str(e)}, status_code=501)
+        return JSONResponse(content={"system_exception": str(e)}, status_code=500)
 
 
 @user_Router.delete("/deleteExistentUser/{cid: str}", status_code=200, tags=["User Router"], response_class=JSONResponse)
@@ -235,11 +235,11 @@ async def user_delete_existent_user(request: Request, cid: str, session: Session
         # If not
         else:
             # Returns the error description
-            return JSONResponse(content=respond, status_code=401)
+            return JSONResponse(content=respond, status_code=500)
     # If there is any exception during the operations
     except Exception as e:
         # Returns the system exception response with the exception description
-        return JSONResponse(content={"system_exception": str(e)}, status_code=501)
+        return JSONResponse(content={"system_exception": str(e)}, status_code=500)
     
 
 @user_Router.delete("/deleteAll", status_code=200, tags=["User Router"], response_class=JSONResponse)
@@ -264,11 +264,11 @@ async def user_delete_all_exixtent_users(request: Request, session: Session = De
         # If not
         else:
             # Returns the error description
-            return JSONResponse(content=respond, status_code=401)
+            return JSONResponse(content=respond, status_code=500)
      # If there is any exception during the operations
     except Exception as e:
         # Returns the system exception response with the exception description
-        return JSONResponse(content={"system_exception": str(e)}, status_code=501)
+        return JSONResponse(content={"system_exception": str(e)}, status_code=500)
     
     
 "-------------------------------------------------------------------------------USER_ROUTES----------------------------------------------------------------------------------------------------------------------------------------------"
