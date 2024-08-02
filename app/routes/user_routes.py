@@ -229,7 +229,7 @@ async def user_delete_existent_user(request: Request, cid: str, session: Session
         # Calls and Gets the response of the delete_existent_user() method
         respond = delete_existent_user(userId=cid, db_session=session)
         # If the response is success
-        if respond["success"]:
+        if respond.get("success"):
             # Returns the success message
             return JSONResponse(content=respond, status_code=200)
         # If not

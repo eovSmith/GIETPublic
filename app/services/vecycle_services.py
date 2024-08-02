@@ -106,7 +106,7 @@ def delete_existent_vecycle(vecyclePlate: str, db_session: Session) -> dict:
     
     try:
         # Search the vecycle in the database with the filter method and the plate
-        vecycle = db_session.query(VecyclesDB).get(vecyclePlate).first()
+        vecycle = db_session.query(VecyclesDB).get(vecyclePlate)
         # If the vecycle exists
         if vecycle:
             # Delete it

@@ -141,6 +141,26 @@ async def vecycle_render_search_page_post(request: Request ,search: VecycleSearc
         # Returns the exception description
         return JSONResponse(content={"System Exception": str(e)}, status_code=501)
 
+@vecycle_Router.delete("/vecycle/delete/all", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse)
+async def delete_all_vecycles(request: Request, db: Session = Depends(db_session)) -> JSONResponse:
+    """
+
+
+    """
+    try:
+        respond = delete_all_existent_vecycles(db_session=db)
+        # If the response is success
+        if respond.get("success"):
+            # Returns the success message
+            return JSONResponse(content=respond, status_code=200)
+        # If not
+        else:   
+            # Returns the error description
+            return JSONResponse(content=respond, status_code=501)
+    except Exception as e:
+        # Returns the system exception response with the exception description  
+        return JSONResponse(content={"system_exception": str(e)}, status_code=501)
+
 
 @vecycle_Router.delete("/vecycle/delete/{vecycle_id}", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse)
 async def delete_vecycle(request: Request ,vecycle_id: str, db: Session = Depends(db_session)) -> JSONResponse:
@@ -153,7 +173,7 @@ async def delete_vecycle(request: Request ,vecycle_id: str, db: Session = Depend
     
     
     try:
-        respond = delete_existent_vecycle(vecyclePlate=vecycle_id, db=db)
+        respond = delete_existent_vecycle(vecyclePlate=vecycle_id, db_session=db)
         # If the response is success
         if respond.get("success"):
             # Returns the success message
@@ -168,27 +188,7 @@ async def delete_vecycle(request: Request ,vecycle_id: str, db: Session = Depend
         return JSONResponse(content={"system_exception": str(e)}, status_code=501)
 
 
-@vecycle_Router.delete("/vecycle/delete/all", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse)
-async def delete_all_vecycles(request: Request, db: Session = Depends(db_session)) -> JSONResponse:
-    """
 
-
-    """
-
-
-    try:
-        respond = delete_all_existent_vecycles(db=db)
-        # If the response is success
-        if respond.get("success"):
-            # Returns the success message
-            return JSONResponse(content=respond, status_code=200)
-        # If not
-        else:   
-            # Returns the error description
-            return JSONResponse(content=respond, status_code=501)
-    except Exception as e:
-        # Returns the system exception response with the exception description  
-        return JSONResponse(content={"system_exception": str(e)}, status_code=501)
 
 
 @vecycle_Router.get("/assign_driver/{vecycle_id}", tags=["Vecycle Router"], status_code=200, response_class=HTMLResponse)
