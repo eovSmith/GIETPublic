@@ -31,7 +31,7 @@ vecycle_Router = APIRouter(prefix="/Vecycles")
 "-----------------------------------------------------------------------Vecycles Routes-----------------------------------------------------------------------"
 
 
-@vecycle_Router.get("/Page", tags=["Vecycle Router"], status_code=200, response_class= HTMLResponse)
+@vecycle_Router.get("/Page", tags=["Vecycle Router"], status_code=200)
 async def vecylce_render_main_page(request: Request) -> HTMLResponse:
     """_Render the vecycle main page_
 
@@ -123,7 +123,7 @@ async def vecycle_render_search_page_post(request: Request ,search: VecycleSearc
 
     try:
         # Call and Gets the response of the create_new_vecycle() method that creates the new vecycle
-        respond = search_vecycle_in_db(search=search, db=db)
+        respond = search_vecycle_in_db(search=search, db_session=db)
         # If got resulsts
         if respond.get("results"):
             # Returns the results

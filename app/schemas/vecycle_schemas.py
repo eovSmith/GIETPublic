@@ -133,7 +133,7 @@ class VecycleSearch(BaseModel):
     
     
     """
-    licensePlate: Optional[str] = None
+    licencePlate: Optional[str] = None
     vecycleType: Optional[str] = None
     model: Optional[str] = None
     brand: Optional[str] = None
