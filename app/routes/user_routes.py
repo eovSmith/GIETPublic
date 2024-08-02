@@ -24,6 +24,8 @@ from fastapi.encoders import jsonable_encoder
 user_Router = APIRouter(prefix="/Users")
 
 "-------------------------------------------------------------------------------USER_ROUTES----------------------------------------------------------------------------------------------------------------------------------------------"
+
+
 @user_Router.get("/login", status_code=200, tags=["User Router"], response_class=JSONResponse)
 async def user_render_login(request: Request) -> None:
     """_Login the user into the system_

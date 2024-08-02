@@ -10,6 +10,7 @@ from pydantic.validators import field_validator
 import re
 
 
+"-------------------------------------------------------------------------------DRIVER_SCHEMAS----------------------------------------------------------------------------------------------------------------------------------------------"
 class DriverCreate(BaseModel):
     cid: str = Field(..., description="The user cid", min_length=11, max_length=11)
     firstName: str = Field(..., description="The user first name", min_length=2, max_length=255)
@@ -75,4 +76,6 @@ class DriverCreate(BaseModel):
             raise ValueError("licenceNumber must be alphanumeric only")
         # If everything is ok return the licenceNumber
         return v
-    
+
+
+"-------------------------------------------------------------------------------DRIVER_SCHEMAS----------------------------------------------------------------------------------------------------------------------------------------------"

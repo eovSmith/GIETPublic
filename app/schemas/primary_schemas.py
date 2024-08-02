@@ -6,6 +6,7 @@ from typing import Optional
 import re
 
 
+"-------------------------------------------------------------------------------USER_SCHEMAS----------------------------------------------------------------------------------------------------------------------------------------------"
 # Clase Constants
 VALID_ROLES = ("U", "T", "A")
 
@@ -159,3 +160,6 @@ class UserChangePassword(BaseModel):
         """_Checks if the passwords are equals_"""
         # returns the value of the bool condition
         return self.planePassword == self.planePasswordRepeat
+    
+
+"-------------------------------------------------------------------------------USER_SCHEMAS----------------------------------------------------------------------------------------------------------------------------------------------"

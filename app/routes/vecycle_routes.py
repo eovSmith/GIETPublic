@@ -28,7 +28,7 @@ from fastapi.encoders import jsonable_encoder
 vecycle_Router = APIRouter(prefix="/Vecycles")
 
 
-"-----------------------------------------------------------------------Vecycles Routes-----------------------------------------------------------------------"
+"-----------------------------------------------------------------------VECYCLES_ROUTES-----------------------------------------------------------------------"
 
 
 @vecycle_Router.get("/Page", tags=["Vecycle Router"], status_code=200)
@@ -221,4 +221,4 @@ async def vecycle_render_assign_driver_post(request: Request, vecycle_id: str, d
         # Returns the system exception response with the exception description  
         return JSONResponse(content={"system_exception": str(e)}, status_code=501)
     
-"-----------------------------------------------------------------------Vecycles Routes-----------------------------------------------------------------------"
+"-----------------------------------------------------------------------VECYCLES_ROUTES-----------------------------------------------------------------------"
