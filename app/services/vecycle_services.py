@@ -142,9 +142,9 @@ def vecycle_assign_driver(vecyclePlate: str, driverCid: str, db_session: Session
     
     try:
         # Search the vecycle in the database with the filter method and the plate
-        vecycle = db_session.query(VecyclesDB).get(vecyclePlate).first()
+        vecycle = db_session.query(VecyclesDB).get(vecyclePlate)
         # Search the driver in the database with the filter method and the cid
-        driver = db_session.query(DriverDB).get(driverCid).first()
+        driver = db_session.query(DriverDB).get(driverCid)
         # If the vecycle and the driver exists
         if vecycle and driver:
             # Assign the driver to the vecycle

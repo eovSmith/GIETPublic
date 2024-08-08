@@ -208,7 +208,7 @@ async def vecycle_render_assign_driver_post(request: Request, vecycle_id: str, d
 
 
     try:
-        respond = vecycle_assign_driver(vecycle_id=vecycle_id, driverCid=driver , db=db)
+        respond = vecycle_assign_driver(vecyclePlate=vecycle_id, driverCid=driver , db_session=db)
         # If the response is success
         if respond.get("success"):
             # Returns the success message

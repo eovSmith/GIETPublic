@@ -1,5 +1,5 @@
 # Import the Base model class for the creation of the schemes and the Field class for validations
-from pydantic import (BaseModel, Field, field_validator, validator)
+from pydantic import (BaseModel, Field, field_validator)
 # Import the Optional class for the definition of opcional fields
 from typing import Optional
 # Import the re python module for the match of regular expressions
