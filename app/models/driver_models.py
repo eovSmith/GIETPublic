@@ -11,6 +11,19 @@ from sqlalchemy import ForeignKey
 
 class DriverDB(Base):
     
+    """_The Drivers model in the datbase_
+
+   
+    cid : The driver id (example: 88031088523)
+    firstName: The driver first name (example: Juan)
+    lastName: The driver last name (example: Perez)
+    licenceNumber: The driver licence number (example: 1234567890)
+    jobPosition: The driver job position (example: Reparter)
+    vecycle: The assigned driver vecycle (example: B123123)
+    
+    
+    """
+    
     
     __tablename__ = "drivers_table"
     cid: Mapped[str] = mapped_column(String(11), primary_key=True)

@@ -1,17 +1,28 @@
 # Import the Base model class for the creation of the schemes and the Field class for validations
-from pydantic import (BaseModel, Field)
+from pydantic import (BaseModel, Field, field_validator)
 # Import the Optional class for the definition of opcional fields
 from typing import Optional
 # Import datemtime.date for date parameters
 from datetime import date
-# Import field_validators for the validation of the fields  
-from pydantic.validators import field_validator
 # Import re for regular expressions
 import re
 
 
 "-------------------------------------------------------------------------------DRIVER_SCHEMAS----------------------------------------------------------------------------------------------------------------------------------------------"
+
+
 class DriverCreate(BaseModel):
+    """_Schema for create new Drivers _
+
+
+    cid : The driver id (example: 88031088523)
+    firstName: The driver first name (example: Juan)
+    lastName: The driver last name (example: Perez)
+    licenceNumber: The driver licence number (example: 1234567890)
+    jobPosition: The driver job position (example: Reparter)
+    
+    
+    """
     cid: str = Field(..., description="The user cid", min_length=11, max_length=11)
     firstName: str = Field(..., description="The user first name", min_length=2, max_length=255)
     lastName: str = Field(..., description="The user last name", min_length=2, max_length=255)
@@ -78,4 +89,27 @@ class DriverCreate(BaseModel):
         return v
 
 
+class DriverSearch(BaseModel):
+    
+    
+    """_The schema for search drivers in the db_
+    
+    cid : The driver id (example: 88031088523)
+    firstName: The driver first name (example: Juan)
+    lastName: The driver last name (example: Perez)
+    licenceNumber: The driver licence number (example: 1234567890)
+    jobPosition: The driver job position (example: Reparter)
+    vecycle: The assigned driver vecycle (example: 1234567890)
+    
+    
+    """
+    cid: str
+    firstName: str
+    lastName: str 
+    licenceNumber: str
+    jobPosition: str 
+    vecycle: str
+    
+    
+    
 "-------------------------------------------------------------------------------DRIVER_SCHEMAS----------------------------------------------------------------------------------------------------------------------------------------------"

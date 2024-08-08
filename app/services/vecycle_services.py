@@ -187,6 +187,33 @@ def delete_all_existent_vecycles(db_session: Session) -> dict:
     except Exception as e:
         # Returns a dict with the exception description
         return {"error": str(e)}
+
+
+def list_existent_vecycles(db_session: Session) -> dict:
+    """_List the existent vecycles in the database_
+
+    Args:
+        db_session (Session): _The database session_
+
+    Returns:
+        List[UsersDB] or dict: _The list of data_
+    """
+    try:
+        # Gets the list of elements in the database
+        respond = db_session.query(VecyclesDB).all()
+        # If there is data
+        if respond:
+            # Returns the list of elements
+            return {"data": respond}
+        # If not
+        else:
+            # Returns a message with the information
+            return {"message": "The data is empty"}
+    # If there is any exception during the process
+    except Exception as e:
+        # Returns a dict with the exception description
+        return {"error": str(e)}
+
     
     
 "-----------------------------------------------------------------------VECYCLE_SERVICES-----------------------------------------------------------------------"
