@@ -66,7 +66,7 @@ class UserCreate(BaseModel):
         # Delete the whitespaces
         data = v.strip()
         # Validate the format of the name
-        if not isinstance(data, str) or not bool(re.fullmatch(r'^[a-zA-Z]+$', v)):
+        if not isinstance(data, str) or not bool(re.fullmatch(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$', v)):
             # Raises a Value error wen it does not satisfaces the conditions
             raise ValueError(" The first name must be in a correct format")
         else : 
@@ -80,7 +80,7 @@ class UserCreate(BaseModel):
         # Delete the whitespaces
         data = v.strip()
         # Validate the format of the name
-        if not isinstance(data, str) or not bool(re.fullmatch(r'^[a-zA-Z]+$', v)):
+        if not isinstance(data, str) or not bool(re.fullmatch(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$', v)):
             # Raises a Value error wen it does not satisfaces the conditions
             raise ValueError(" The last name must be in a correct format")
         else : 

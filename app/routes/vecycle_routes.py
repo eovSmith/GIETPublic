@@ -11,7 +11,7 @@ from fastapi.responses import HTMLResponse
 # Import the schemas
 from schemas.vecycle_schemas import (VecycleCreate, VecycleSearch)
 # Import the vecycle services
-from services.vecycle_services import (create_new_vecycle, delete_all_existent_vecycles, delete_existent_vecycle, search_vecycle_in_db, vecycle_assign_driver)
+from services.vecycle_services import (create_new_vecycle, delete_all_existent_vecycles, delete_existent_vecycle, search_vecycle_in_db, vecycle_assign_driver, vecycle_get_driver)
 # Import the database connection
 from config.database_connection import db_session
 # Import the database session class
@@ -162,7 +162,7 @@ async def delete_all_vecycles(request: Request, db: Session = Depends(db_session
         return JSONResponse(content={"system_exception": str(e)}, status_code=501)
 
 
-@vecycle_Router.delete("/vecycle/delete/{vecycle_id}", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse)
+@vecycle_Router.delete("/vecycle/delete/{vecycle_id: str}", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse)
 async def delete_vecycle(request: Request ,vecycle_id: str, db: Session = Depends(db_session)) -> JSONResponse:
     """
 
@@ -191,7 +191,7 @@ async def delete_vecycle(request: Request ,vecycle_id: str, db: Session = Depend
 
 
 
-@vecycle_Router.get("/assign_driver/{vecycle_id}", tags=["Vecycle Router"], status_code=200, response_class=HTMLResponse)
+@vecycle_Router.get("/assign_driver/{vecycle_id: str}", tags=["Vecycle Router"], status_code=200, response_class=HTMLResponse)
 async def vecycle_render_assign_driver_get(request: Request) -> HTMLResponse:
     """"""
     
@@ -199,7 +199,7 @@ async def vecycle_render_assign_driver_get(request: Request) -> HTMLResponse:
 
 
 
-@vecycle_Router.post("/assign_driver/{vecycle_id}", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse )
+@vecycle_Router.post("/assign_driver/{vecycle_id: str}", tags=["Vecycle Router"], status_code=200, response_class=JSONResponse )
 async def vecycle_render_assign_driver_post(request: Request, vecycle_id: str, driver: str , db: Session = Depends(db_session)) -> JSONResponse:
     """
 
@@ -220,5 +220,21 @@ async def vecycle_render_assign_driver_post(request: Request, vecycle_id: str, d
     except Exception as e:
         # Returns the system exception response with the exception description  
         return JSONResponse(content={"system_exception": str(e)}, status_code=501)
+
+
+@vecycle_Router.get("/getDriver/{vecycle_id: str}", status_code=200, tags=["Vecycle Router"], response_class=JSONResponse)
+async def vecycle_get_assigned_driver(request: Request, vecycle_id: str, db: Session = Depends(db_session)) -> JSONResponse:
+    try:
+        driver = vecycle_get_driver(vecyclePlate=vecycle_id, db_session=db)
+        print(driver)
+        if not driver.get("error"):
+            return JSONResponse(jsonable_encoder(driver["driver"]), status_code=200)
+        else:
+            return  JSONResponse(driver, status_code=404)
+    except Exception as e:
+        return JSONResponse(content={"system_exception": str(e)}, status_code=501)
+        
+    
+    
     
 "-----------------------------------------------------------------------VECYCLES_ROUTES-----------------------------------------------------------------------"

@@ -27,7 +27,7 @@ class DriverDB(Base):
     
     __tablename__ = "drivers_table"
     cid: Mapped[str] = mapped_column(String(11), primary_key=True)
-    firstName: Mapped[str] = mapped_column(String(255), nullable=False)
+    firstName: Mapped[str] = mapped_column(String(200), nullable=False)
     lastName: Mapped[str] = mapped_column(String(255), nullable=False)
     licenceNumber: Mapped[str] = mapped_column(String(8), nullable=False)
     jobPosition:  Mapped[str] = mapped_column(String(255), nullable=False)

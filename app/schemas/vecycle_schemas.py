@@ -49,17 +49,26 @@ class VecycleCreate(BaseModel):
     def validate_licence_plate(cls, value: str):
         """_Validator for the licence Plate _"""
         # Check if the licence plate is empty
-        if not value.strip():
+        data = value.strip()
+        if not data:
             # if empty raise an Value error
             raise ValueError("Licence plate field cannot be empty")
         # Check if the licence plate is in the correct format
-        if not re.match(r"\d{8}", value):
+        if not re.match(r"^[A-Za-z]\d{6}$", data):
             # If is not in the correct format raise an Value error
-            raise ValueError("Invalid licence plate format. Please use 8 digits")
+            raise ValueError("Invalid licence plate format. Please use a letter and 6 digits")
         # If everything is ok
         else:
-            # return value
-            return value
+            # If the first letter is not upper case
+            if not value[0].isupper():
+                # Change it to upper
+                value[0] = value[0].upper()
+                # And return the value
+                return value
+            # If the first letter is upper case
+            else:    
+                # return value
+                return value
     
     
     @field_validator("countryOfOrigin")

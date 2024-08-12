@@ -24,7 +24,7 @@ class VecyclesDB(Base):
     
     """
     __tablename__ = "vecycles_table"
-    licencePlate: Mapped[str] = mapped_column(String(8), primary_key=True)
+    licencePlate: Mapped[str] = mapped_column(String(7), primary_key=True)
     vecycleType: Mapped[str] = mapped_column(String(12), nullable=False)
     brand: Mapped[str] = mapped_column(String(255), nullable=False)
     model: Mapped[str] = mapped_column(String(255), nullable=False)

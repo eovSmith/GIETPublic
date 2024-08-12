@@ -52,7 +52,7 @@ class DriverCreate(BaseModel):
             # If empty raise an error
             raise ValueError('firstName is required')
         # Check if the firstName is text only
-        if not re.match(r'^[a-zA-Z\s]*$', v):
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$', v):
             # If not raise an error
             raise ValueError('firstName must be text only')
         # If everything is ok return the firstName
@@ -67,7 +67,7 @@ class DriverCreate(BaseModel):
             # If empty raise an error
             raise ValueError("lastName required")
         # Check if the lastName is text only
-        if not re.match(r'^[a-zA-Z\s]*$', v):
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+$', v):
             # If not raise an error
             raise ValueError("lastName must be text only")
         # If everything is ok return the lastName

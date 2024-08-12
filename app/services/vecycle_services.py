@@ -14,6 +14,10 @@ from sqlalchemy import (and_ , or_)
 from typing import List , Union
 # Import jsonable_encoder to convert the data to json
 from fastapi.encoders import jsonable_encoder
+# Import Integrity Error for the validation
+from sqlalchemy.exc import IntegrityError
+# Import the DriverDB model
+from models.driver_models import DriverDB
 
 
 "-----------------------------------------------------------------------VECYCLE_SERVICES-----------------------------------------------------------------------"
@@ -46,6 +50,9 @@ def create_new_vecycle(vecycle: VecycleCreate, db_session: Session) -> dict:
         db_session.refresh(new_vecycle)
         # Return the response of the vecycle created
         return {"success": "Vecycle created successfully"}
+    except IntegrityError:
+        # If there is any integrity error during the process
+        return {"error": "Vecycle already exists"}
     # If there is any excetion during the process
     except Exception as e:
         # Return the response of the  error with the system exception
@@ -214,6 +221,29 @@ def list_existent_vecycles(db_session: Session) -> dict:
         # Returns a dict with the exception description
         return {"error": str(e)}
 
+
+def vecycle_get_driver(vecyclePlate: str, db_session: Session) -> dict:
+    """_Gets the assigned driver to the especified vecyle_
+
+    Args:
+        vecyclePlate (str): _The vecycle licence Plate_
+        db_session (Session): _The database session_
+
+    Returns:
+        DriverDB: _Driver instance in the vecycle_
+    """
+    
+    try:
+        # Gets the desired vecycle 
+        vecycle = db_session.query(VecyclesDB).get(vecyclePlate)
+        # Gets the driver assigned to the selected vecycle
+        assignedDriver = vecycle.driver
+        # Returns the driver
+        return {"driver": assignedDriver}
+    # If there is any exception during the process
+    except Exception as e:
+        # Returns a dict with the exception descriptiom
+        return {"error": str(e)}
     
     
 "-----------------------------------------------------------------------VECYCLE_SERVICES-----------------------------------------------------------------------"
